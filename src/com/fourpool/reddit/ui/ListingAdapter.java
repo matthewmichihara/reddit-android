@@ -6,19 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.fourpool.baconapi.Listing;
 import com.fourpool.reddit.R;
-import com.fourpool.reddit.model.Link;
 
 import java.util.List;
 
-public class LinkArrayAdapter extends ArrayAdapter<Link> {
-    public LinkArrayAdapter(Context context, List<Link> links) {
-        super(context, R.layout.layout_link_item, links);
+public class ListingAdapter extends ArrayAdapter<Listing.ListingDataChild> {
+    public ListingAdapter(Context context, List<Listing.ListingDataChild> list) {
+        super(context, R.layout.layout_link_item, list);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Link link = getItem(position);
+        Listing.ListingDataChild ldc = getItem(position);
         ViewHolder holder;
 
         if (convertView == null) {
@@ -33,7 +33,7 @@ public class LinkArrayAdapter extends ArrayAdapter<Link> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tvTitle.setText(link.getTitle());
+        holder.tvTitle.setText(ldc.data.title);
 
         return convertView;
     }

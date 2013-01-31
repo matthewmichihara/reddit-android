@@ -32,11 +32,11 @@ public class MainActivity extends FragmentActivity implements LinkListFragment.C
     }
 
     @Override
-    public void onLinkClicked(Link link) {
+    public void onLinkClicked(String permalink) {
         // Create comments fragment and pass it the link to its content.
         CommentsFragment commentsFragment = new CommentsFragment();
         Bundle args = new Bundle();
-        args.putString(CommentsFragment.ARG_LINK, link.getPermalink().toString());
+        args.putString(CommentsFragment.ARG_LINK, permalink);
         commentsFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
