@@ -4,9 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import com.fourpool.reddit.R;
-import com.fourpool.reddit.model.Link;
 
-public class MainActivity extends FragmentActivity implements LinkListFragment.Callbacks {
+public class MainActivity extends FragmentActivity implements SubredditFragment.Callbacks {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,13 +21,13 @@ public class MainActivity extends FragmentActivity implements LinkListFragment.C
             }
         }
 
-        LinkListFragment linkListFragment = new LinkListFragment();
+        SubredditFragment subredditFragment = new SubredditFragment();
 
         // In case this activity was started with special instructions from an Intent, pass the Intent's extras to the fragment as arguments.
-        linkListFragment.setArguments(getIntent().getExtras());
+        subredditFragment.setArguments(getIntent().getExtras());
 
         // Add the fragment to the fragment container.
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, linkListFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, subredditFragment).commit();
     }
 
     @Override

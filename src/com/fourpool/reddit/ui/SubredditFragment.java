@@ -14,15 +14,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import com.fourpool.baconapi.Listing;
 import com.fourpool.reddit.R;
-import com.fourpool.reddit.model.Link;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinkListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Listing> {
+public class SubredditFragment extends Fragment implements LoaderManager.LoaderCallbacks<Listing> {
 
-    private static final String TAG = LinkListFragment.class.getSimpleName();
-    private ListingAdapter mAdapter;
+    private static final String TAG = SubredditFragment.class.getSimpleName();
+    private ListingDataChildAdapter mAdapter;
     private Callbacks mCallbacks;
 
     @Override
@@ -34,7 +33,7 @@ public class LinkListFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_link_list, container, false);
 
-        mAdapter = new ListingAdapter(getActivity(), new ArrayList<Listing.ListingDataChild>());
+        mAdapter = new ListingDataChildAdapter(getActivity(), new ArrayList<Listing.ListingDataChild>());
         ListView listView = (ListView) v.findViewById(R.id.link_list);
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

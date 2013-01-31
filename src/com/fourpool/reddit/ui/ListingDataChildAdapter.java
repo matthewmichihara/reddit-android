@@ -11,8 +11,8 @@ import com.fourpool.reddit.R;
 
 import java.util.List;
 
-public class ListingAdapter extends ArrayAdapter<Listing.ListingDataChild> {
-    public ListingAdapter(Context context, List<Listing.ListingDataChild> list) {
+public class ListingDataChildAdapter extends ArrayAdapter<Listing.ListingDataChild> {
+    public ListingDataChildAdapter(Context context, List<Listing.ListingDataChild> list) {
         super(context, R.layout.layout_link_item, list);
     }
 
