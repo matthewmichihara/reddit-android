@@ -37,7 +37,7 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_link_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_listing, container, false);
 
         mAdapter = new ListingAdapter(getActivity(), new ArrayList<Listing>());
         ListView listView = (ListView) v.findViewById(R.id.link_list);

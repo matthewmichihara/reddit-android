@@ -10,7 +10,7 @@ public class MainActivity extends SherlockFragmentActivity implements SubredditF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_main);
+        setContentView(R.layout.activity_main);
 
         // Check that the activity is using the layout version with the fragment container.
         if (findViewById(R.id.fragment_container) != null) {

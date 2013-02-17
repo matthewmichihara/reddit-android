@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ListingAdapter extends ArrayAdapter<Listing> {
     public ListingAdapter(Context context, List<Listing> list) {
-        super(context, R.layout.layout_link_item, list);
+        super(context, R.layout.list_item_listing, list);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ListingAdapter extends ArrayAdapter<Listing> {
         ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.layout_link_item, null);
+            convertView = inflater.inflate(R.layout.list_item_listing, null);
 
             holder = new ViewHolder();
             holder.tvTitle = (TextView) convertView.findViewById(R.id.link_title);
