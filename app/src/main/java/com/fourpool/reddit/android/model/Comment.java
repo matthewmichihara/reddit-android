@@ -2,6 +2,9 @@ package com.fourpool.reddit.android.model;
 
 import java.util.List;
 
+/**
+ * @author Matthew Michihara
+ */
 public class Comment {
     private final String mAuthor;
     private final String mBody;

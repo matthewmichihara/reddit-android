@@ -3,6 +3,7 @@ target/
 **pom.xml.releaseBackup
 gen-external-apklibs/
 release.properties
+out/
 
 # Intellij project files
 *.iml

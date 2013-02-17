@@ -10,6 +10,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Matthew Michihara
+ */
 public final class CommentsFetcher {
     private static final String TAG = CommentsFetcher.class.getSimpleName();
 
@@ -49,7 +52,7 @@ public final class CommentsFetcher {
                 String body = commentDataObject.getString("body");
                 List<Comment> replies = new ArrayList<Comment>();
 
-                JSONObject repliesObject = commentsDataObject.optJSONObject("replies");
+                JSONObject repliesObject = commentDataObject.optJSONObject("replies");
                 if (repliesObject != null) {
                     replies.addAll(getComments(repliesObject));
                 }

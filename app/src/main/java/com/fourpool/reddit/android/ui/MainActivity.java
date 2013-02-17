@@ -3,7 +3,6 @@ package com.fourpool.reddit.android.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import com.fourpool.reddit.android.R;
 
 public class MainActivity extends FragmentActivity implements SubredditFragment.Callbacks {
@@ -12,8 +11,6 @@ public class MainActivity extends FragmentActivity implements SubredditFragment.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
-
-        Log.e("ASDF", "HELLO WORLD");
 
         // Check that the activity is using the layout version with the fragment container.
         if (findViewById(R.id.fragment_container) != null) {

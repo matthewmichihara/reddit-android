@@ -13,15 +13,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.fourpool.reddit.android.R;
+import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubredditFragment extends Fragment implements LoaderManager.LoaderCallbacks<Listing> {
+/**
+ * Displays a list of links for a particular subreddit.
+ *
+ * @author Matthew Michihara
+ */
+public class SubredditFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Listing>> {
 
     private static final String TAG = SubredditFragment.class.getSimpleName();
-    private ListingDataChildAdapter mAdapter;
+    private ListingAdapter mAdapter;
     private Callbacks mCallbacks;
 
     @Override
@@ -33,14 +39,14 @@ public class SubredditFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_link_list, container, false);
 
-        mAdapter = new ListingDataChildAdapter(getActivity(), new ArrayList<Listing.ListingDataChild>());
+        mAdapter = new ListingAdapter(getActivity(), new ArrayList<Listing>());
         ListView listView = (ListView) v.findViewById(R.id.link_list);
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Listing.ListingDataChild ldc = (Listing.ListingDataChild) parent.getItemAtPosition(position);
-                mCallbacks.onLinkClicked(ldc.data.permalink);
+                Listing listing = (Listing) parent.getItemAtPosition(position);
+                mCallbacks.onLinkClicked(listing.getPermalink());
             }
         });
 
@@ -61,12 +67,14 @@ public class SubredditFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public Loader<Listing> onCreateLoader(int id, Bundle data) {
+    public Loader<List<Listing>> onCreateLoader(int id, Bundle data) {
         Log.e(TAG, "onCreateLoader called");
-        Loader<Listing> loader = new AsyncTaskLoader<Listing>(getActivity()) {
+
+        Loader<List<Listing>> loader = new AsyncTaskLoader<List<Listing>>(getActivity()) {
             @Override
-            public Listing loadInBackground() {
-                return Listing.forSubreddit("swimming");
+            public List<Listing> loadInBackground() {
+                // Empty string means front page.
+                return ListingsFetcher.fetch("gaming");
             }
         };
 
@@ -74,22 +82,19 @@ public class SubredditFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onLoadFinished(Loader<Listing> loader, Listing listing) {
+    public void onLoadFinished(Loader<List<Listing>> loader, List<Listing> listings) {
         Log.e(TAG, "onLoadFinished called");
         if (getActivity() == null) {
             return;
         }
 
-        Listing.ListingData data = listing.data;
-        List<Listing.ListingDataChild> children = data.children;
-
         mAdapter.clear();
-        mAdapter.addAll(children);
+        mAdapter.addAll(listings);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onLoaderReset(Loader<Listing> loader) {
+    public void onLoaderReset(Loader<List<Listing>> loader) {
     }
 
     interface Callbacks {

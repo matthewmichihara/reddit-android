@@ -11,16 +11,19 @@ import com.fourpool.reddit.android.model.Listing;
 
 import java.util.List;
 
-public class ListingDataChildAdapter extends ArrayAdapter<Listing.ListingDataChild> {
-    public ListingDataChildAdapter(Context context, List<Listing.ListingDataChild> list) {
+/**
+ * @author Matthew Michihara
+ */
+public class ListingAdapter extends ArrayAdapter<Listing> {
+    public ListingAdapter(Context context, List<Listing> list) {
         super(context, R.layout.layout_link_item, list);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Listing.ListingDataChild ldc = getItem(position);
-        ViewHolder holder;
+        Listing listing = getItem(position);
 
+        ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.layout_link_item, null);
@@ -33,7 +36,7 @@ public class ListingDataChildAdapter extends ArrayAdapter<Listing.ListingDataChi
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tvTitle.setText(ldc.data.title);
+        holder.tvTitle.setText(listing.getTitle());
 
         return convertView;
     }

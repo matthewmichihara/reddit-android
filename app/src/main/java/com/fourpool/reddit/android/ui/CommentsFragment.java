@@ -12,13 +12,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.CommentsFetcher;
 import com.fourpool.reddit.android.model.Comment;
-import com.fourpool.reddit.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Matthew Michihara
+ */
 public class CommentsFragment extends Fragment {
     public static final String ARG_LINK = "link";
     private final List<Comment> mComments = new ArrayList<Comment>();
@@ -45,8 +48,6 @@ public class CommentsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Comment comment = (Comment) parent.getItemAtPosition(position);
                 List<Comment> children = comment.getReplies();
-
-                Log.e("ASDF", "num children " + children.size());
 
                 if (comment.getIsExpanded()) {
                     mComments.removeAll(children);
@@ -90,14 +91,14 @@ public class CommentsFragment extends Fragment {
         outState.putString(ARG_LINK, mCurrentLink);
     }
 
-    public void updateContent(String url) {
+    public void updateContent(final String url) {
         mTvTitle.setText(url);
         mCurrentLink = url;
 
         new AsyncTask<Void, Void, List<Comment>>() {
             @Override
             protected List<Comment> doInBackground(Void... params) {
-                return CommentsFetcher.fetch("http://www.reddit.com/comments/183y5i.json");
+                return CommentsFetcher.fetch(url + ".json");
             }
 
             @Override
