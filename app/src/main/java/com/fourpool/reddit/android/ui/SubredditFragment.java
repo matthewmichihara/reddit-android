@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,13 +67,11 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
 
     @Override
     public Loader<List<Listing>> onCreateLoader(int id, Bundle data) {
-        Log.e(TAG, "onCreateLoader called");
-
         Loader<List<Listing>> loader = new AsyncTaskLoader<List<Listing>>(getActivity()) {
             @Override
             public List<Listing> loadInBackground() {
                 // Empty string means front page.
-                return ListingsFetcher.fetch("gaming");
+                return ListingsFetcher.fetch(null);
             }
         };
 
@@ -83,7 +80,6 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
 
     @Override
     public void onLoadFinished(Loader<List<Listing>> loader, List<Listing> listings) {
-        Log.e(TAG, "onLoadFinished called");
         if (getActivity() == null) {
             return;
         }

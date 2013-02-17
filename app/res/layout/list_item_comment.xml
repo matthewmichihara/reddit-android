@@ -3,8 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:minHeight="?android:listPreferredItemHeightSmall">
+              android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tv_author"
@@ -17,7 +16,6 @@
         android:id="@+id/tv_text"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:text="This is some body text"
-        android:textAppearance="?android:textAppearanceListItemSmall"/>
+        android:text="This is some body text"/>
 
 </LinearLayout>

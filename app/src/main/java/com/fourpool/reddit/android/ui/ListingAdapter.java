@@ -1,6 +1,7 @@
 package com.fourpool.reddit.android.ui;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,19 +30,31 @@ public class ListingAdapter extends ArrayAdapter<Listing> {
             convertView = inflater.inflate(R.layout.list_item_listing, null);
 
             holder = new ViewHolder();
-            holder.tvTitle = (TextView) convertView.findViewById(R.id.link_title);
+            holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
+            holder.tvSubtitle = (TextView) convertView.findViewById(R.id.subtitle);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tvTitle.setText(listing.getTitle());
+        // Extract listing information we need.
+        String title = listing.getTitle();
+
+        CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(listing.getCreatedUtc());
+        String author = listing.getAuthor();
+        String subreddit = listing.getSubreddit();
+        String subtitle = getContext().getString(R.string.submitted_n_time_ago_by_x_to_y, relativeTimeSpanString, author, subreddit);
+
+        // Populate views.
+        holder.tvTitle.setText(title);
+        holder.tvSubtitle.setText(subtitle);
 
         return convertView;
     }
 
     static class ViewHolder {
         TextView tvTitle;
+        TextView tvSubtitle;
     }
 }

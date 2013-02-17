@@ -2,6 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.RedditAndroid" parent="Theme.Sherlock.Light.DarkActionBar">
+        <!-- Set default widget styles -->
         <item name="android:actionBarStyle">@style/Widget.RedditAndroid.ActionBar</item>
         <item name="actionBarStyle">@style/Widget.RedditAndroid.ActionBar</item>
     </style>

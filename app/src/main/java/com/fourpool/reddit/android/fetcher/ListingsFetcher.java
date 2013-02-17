@@ -27,7 +27,11 @@ public final class ListingsFetcher {
     public static List<Listing> fetch(String subredditName) {
         List<Listing> listings = new ArrayList<Listing>();
 
-        String subredditUrl = "http://reddit.com/r/" + subredditName + ".json";
+        // Default to the front page.
+        String subredditUrl = "http://reddit.com/.json";
+        if (subredditName != null) {
+            subredditUrl = "http://reddit.com/r/" + subredditName + ".json";
+        }
         String listingsJsonString = HttpRequest.get(subredditUrl).body();
 
         try {
@@ -41,8 +45,11 @@ public final class ListingsFetcher {
 
                 String title = childListingData.getString("title");
                 String permalink = childListingData.getString("permalink");
+                String author = childListingData.getString("author");
+                String subreddit = childListingData.getString("subreddit");
+                long createdUtc = childListingData.getLong("created_utc");
 
-                Listing listing = new Listing(title, permalink);
+                Listing listing = new Listing(title, permalink, author, subreddit, createdUtc);
                 listings.add(listing);
             }
 

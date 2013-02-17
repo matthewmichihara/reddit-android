@@ -32,7 +32,7 @@ public class CommentsFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_comments, container, false);
-        mTvTitle = (TextView) root.findViewById(R.id.link_title);
+        mTvTitle = (TextView) root.findViewById(R.id.title);
         mLvComments = (ListView) root.findViewById(R.id.lv_comments);
 
         mLvComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
