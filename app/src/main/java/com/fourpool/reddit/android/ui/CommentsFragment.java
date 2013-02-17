@@ -14,6 +14,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.CommentsFetcher;
 import com.fourpool.reddit.android.model.Comment;
+import com.fourpool.reddit.android.model.Listing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +23,14 @@ import java.util.List;
  * @author Matthew Michihara
  */
 public class CommentsFragment extends SherlockFragment {
-    public static final String ARG_LINK = "link";
+    public static final String ARG_LISTING = "listing";
     private final List<Comment> mComments = new ArrayList<Comment>();
     private CommentListAdapter mCommentListAdapter;
-    private String mCurrentLink = null;
     private TextView mTvTitle;
     private ListView mLvComments;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // If activity recreated (such as from screen rotate), restore the previous comment set by
-        // onSaveInstanceState(). This is primarily necessary when in the two-pane layout.
-        if (savedInstanceState != null) {
-            mCurrentLink = savedInstanceState.getString(ARG_LINK, null);
-        }
-
         View root = inflater.inflate(R.layout.fragment_comments, container, false);
         mTvTitle = (TextView) root.findViewById(R.id.link_title);
         mLvComments = (ListView) root.findViewById(R.id.lv_comments);
@@ -75,24 +68,16 @@ public class CommentsFragment extends SherlockFragment {
         Bundle args = getArguments();
         if (args != null) {
             // Set the comments based on the link passed in.
-            updateContent(args.getString(ARG_LINK));
-        } else if (mCurrentLink != null) {
-            // Set the comments based on saved instance state defined during onCreateView.
-            updateContent(mCurrentLink);
+            Listing listing = args.getParcelable(ARG_LISTING);
+            updateContent(listing);
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void updateContent(Listing listing) {
+        final String url = listing.getPermalink();
+        String title = listing.getTitle();
 
-        // Save the current comment link in case we need to recreate the fragment.
-        outState.putString(ARG_LINK, mCurrentLink);
-    }
-
-    public void updateContent(final String url) {
-        mTvTitle.setText(url);
-        mCurrentLink = url;
+        mTvTitle.setText(title);
 
         new AsyncTask<Void, Void, List<Comment>>() {
             @Override

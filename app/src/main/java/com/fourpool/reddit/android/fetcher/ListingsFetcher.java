@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author Matthew Michihara
  */
-public class ListingsFetcher {
+public final class ListingsFetcher {
     private static final String TAG = ListingsFetcher.class.getSimpleName();
 
     private ListingsFetcher() {

@@ -46,7 +46,7 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Listing listing = (Listing) parent.getItemAtPosition(position);
-                mCallbacks.onLinkClicked(listing.getPermalink());
+                mCallbacks.onListingClicked(listing);
             }
         });
 
@@ -98,6 +98,6 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     }
 
     interface Callbacks {
-        void onLinkClicked(String permalink);
+        void onListingClicked(Listing listing);
     }
 }

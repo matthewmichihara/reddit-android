@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.fourpool.reddit.android.R;
+import com.fourpool.reddit.android.model.Listing;
 
 public class MainActivity extends SherlockFragmentActivity implements SubredditFragment.Callbacks {
 
@@ -33,11 +34,11 @@ public class MainActivity extends SherlockFragmentActivity implements SubredditF
     }
 
     @Override
-    public void onLinkClicked(String permalink) {
+    public void onListingClicked(Listing listing) {
         // Create comments fragment and pass it the link to its content.
         CommentsFragment commentsFragment = new CommentsFragment();
         Bundle args = new Bundle();
-        args.putString(CommentsFragment.ARG_LINK, permalink);
+        args.putParcelable(CommentsFragment.ARG_LISTING, listing);
         commentsFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
