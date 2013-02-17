@@ -2,7 +2,6 @@ package com.fourpool.reddit.android.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author Matthew Michihara
  */
-public class SubredditFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Listing>> {
+public class SubredditFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Listing>> {
 
     private static final String TAG = SubredditFragment.class.getSimpleName();
     private ListingAdapter mAdapter;

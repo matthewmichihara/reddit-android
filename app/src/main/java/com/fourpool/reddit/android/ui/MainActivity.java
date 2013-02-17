@@ -1,11 +1,11 @@
 package com.fourpool.reddit.android.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.fourpool.reddit.android.R;
 
-public class MainActivity extends FragmentActivity implements SubredditFragment.Callbacks {
+public class MainActivity extends SherlockFragmentActivity implements SubredditFragment.Callbacks {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

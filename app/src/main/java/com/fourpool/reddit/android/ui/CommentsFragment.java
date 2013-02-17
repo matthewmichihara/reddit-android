@@ -3,8 +3,6 @@ package com.fourpool.reddit.android.ui;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.CommentsFetcher;
 import com.fourpool.reddit.android.model.Comment;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * @author Matthew Michihara
  */
-public class CommentsFragment extends Fragment {
+public class CommentsFragment extends SherlockFragment {
     public static final String ARG_LINK = "link";
     private final List<Comment> mComments = new ArrayList<Comment>();
     private CommentListAdapter mCommentListAdapter;

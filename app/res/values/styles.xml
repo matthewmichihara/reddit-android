@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.RedditAndroid" parent="android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="Theme.RedditAndroid" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Widget.RedditAndroid.ActionBar</item>
+        <item name="actionBarStyle">@style/Widget.RedditAndroid.ActionBar</item>
     </style>
 
-    <style name="Widget.RedditAndroid.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="Widget.RedditAndroid.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
+        <item name="displayOptions">showHome|homeAsUp|showTitle</item>
     </style>
 
 </resources>
