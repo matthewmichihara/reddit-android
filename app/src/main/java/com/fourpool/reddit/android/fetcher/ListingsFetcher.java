@@ -13,31 +13,51 @@ import java.util.List;
 /**
  * @author Matthew Michihara
  */
-public final class ListingsFetcher {
+public class ListingsFetcher {
     private static final String TAG = ListingsFetcher.class.getSimpleName();
+    private final String mSubreddit;
+    private final List<Listing> mListings = new ArrayList<Listing>();
+    private String mAfter;
 
-    private ListingsFetcher() {
+    public ListingsFetcher(String subreddit) {
+        mSubreddit = subreddit;
     }
 
     /**
-     * Fetches a {@link List} of {@link Listing}s for a particular subreddit.
-     *
-     * @param subredditName The name of the subreddit
+     * Returns a copy of all fetched listings.
      */
-    public static List<Listing> fetch(String subredditName) {
-        List<Listing> listings = new ArrayList<Listing>();
+    public synchronized List<Listing> getCurrentListings() {
+        return new ArrayList<Listing>(mListings);
+    }
 
-        // Default to the front page.
-        String subredditUrl = "http://reddit.com/.json";
-        if (subredditName != null) {
-            subredditUrl = "http://reddit.com/r/" + subredditName + ".json";
+    public synchronized void loadMore() {
+        String url = "http://reddit.com/.json";
+
+        if (mSubreddit != null) {
+            url = "http://reddit.com/r/" + mSubreddit + ".json";
         }
-        String listingsJsonString = HttpRequest.get(subredditUrl).body();
+
+        if (mAfter != null) {
+            url += "?after=" + mAfter;
+        }
+
+        ListingData listingData = fetch(url);
+
+        mListings.addAll(listingData.mListings);
+        mAfter = listingData.mAfter;
+    }
+
+    private ListingData fetch(String url) {
+        List<Listing> listings = new ArrayList<Listing>();
+        String after = null;
+
+        String listingsJsonString = HttpRequest.get(url).body();
 
         try {
             JSONObject rootListingsObject = new JSONObject(listingsJsonString);
             JSONObject dataObject = rootListingsObject.getJSONObject("data");
             JSONArray listingsJsonArray = dataObject.getJSONArray("children");
+            after = dataObject.getString("after");
 
             for (int i = 0; i < listingsJsonArray.length(); i++) {
                 JSONObject childListing = listingsJsonArray.getJSONObject(i);
@@ -57,6 +77,19 @@ public final class ListingsFetcher {
             Log.e(TAG, "Error parsing listings", e);
         }
 
-        return listings;
+        return new ListingData(listings, after);
+    }
+
+    /**
+     * Container object for returning listing data.
+     */
+    class ListingData {
+        List<Listing> mListings;
+        String mAfter;
+
+        public ListingData(List<Listing> listings, String after) {
+            mListings = listings;
+            mAfter = after;
+        }
     }
 }

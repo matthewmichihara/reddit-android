@@ -39,17 +39,21 @@ public class CommentsFragment extends SherlockFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Comment comment = (Comment) parent.getItemAtPosition(position);
-                List<Comment> children = comment.getReplies();
 
                 if (comment.getIsExpanded()) {
-                    mComments.removeAll(children);
+                    List<Comment> descendants = comment.getAllDescendantReplies();
+                    mComments.removeAll(descendants);
+                    for (Comment descendant : descendants) {
+                        descendant.setIsExpanded(false);
+                    }
+                    comment.setIsExpanded(false);
+
                 } else {
                     int commentIndex = mComments.indexOf(comment);
+                    List<Comment> children = comment.getReplies();
                     mComments.addAll(commentIndex + 1, children);
+                    comment.setIsExpanded(true);
                 }
-
-                // Toggle expanded state.
-                comment.setIsExpanded(!comment.getIsExpanded());
 
                 mCommentListAdapter.notifyDataSetChanged();
             }

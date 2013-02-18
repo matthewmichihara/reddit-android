@@ -1,5 +1,6 @@
 package com.fourpool.reddit.android.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,18 @@ public class Comment {
 
     public List<Comment> getReplies() {
         return mReplies;
+    }
+
+    public List<Comment> getAllDescendantReplies() {
+        List<Comment> descendants = new ArrayList<Comment>();
+
+        descendants.addAll(mReplies);
+
+        for (Comment reply : mReplies) {
+            descendants.addAll(reply.getReplies());
+        }
+
+        return descendants;
     }
 
     public Comment getParent() {

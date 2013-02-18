@@ -44,7 +44,8 @@ public class ListingAdapter extends ArrayAdapter<Listing> {
         CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(listing.getCreatedUtc());
         String author = listing.getAuthor();
         String subreddit = listing.getSubreddit();
-        String subtitle = getContext().getString(R.string.submitted_n_time_ago_by_x_to_y, relativeTimeSpanString, author, subreddit);
+        String subtitle = getContext().getString(R.string.submitted_n_time_ago_by_x_to_y, relativeTimeSpanString,
+                author, subreddit);
 
         // Populate views.
         holder.tvTitle.setText(title);

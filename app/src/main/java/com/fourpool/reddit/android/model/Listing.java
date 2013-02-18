@@ -23,12 +23,14 @@ public class Listing implements Parcelable {
     private final String mSubreddit;
     private final long mCreatedUtc;
 
+    private static final long MILLISECONDS_IN_SECOND = 1000;
+
     public Listing(String title, String permalink, String author, String subreddit, long createdUtc) {
         mTitle = title;
         mPermalink = "http://reddit.com" + permalink;
         mAuthor = author;
         mSubreddit = subreddit;
-        mCreatedUtc = createdUtc * 1000;
+        mCreatedUtc = createdUtc * MILLISECONDS_IN_SECOND;
     }
 
     private Listing(Parcel in) {

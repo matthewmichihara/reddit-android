@@ -15,7 +15,6 @@ import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +25,8 @@ import java.util.List;
 public class SubredditFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Listing>> {
 
     private static final String TAG = SubredditFragment.class.getSimpleName();
-    private ListingAdapter mAdapter;
+    private ListingsFetcher mListingFetcher;
+    private ListView mLvListings;
     private Callbacks mCallbacks;
 
     @Override
@@ -38,10 +38,10 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_listing, container, false);
 
-        mAdapter = new ListingAdapter(getActivity(), new ArrayList<Listing>());
-        ListView listView = (ListView) v.findViewById(R.id.link_list);
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListingFetcher = new ListingsFetcher(null);
+
+        mLvListings = (ListView) v.findViewById(R.id.link_list);
+        mLvListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Listing listing = (Listing) parent.getItemAtPosition(position);
@@ -70,8 +70,8 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
         Loader<List<Listing>> loader = new AsyncTaskLoader<List<Listing>>(getActivity()) {
             @Override
             public List<Listing> loadInBackground() {
-                // Empty string means front page.
-                return ListingsFetcher.fetch(null);
+                mListingFetcher.loadMore();
+                return mListingFetcher.getCurrentListings();
             }
         };
 
@@ -84,9 +84,8 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
             return;
         }
 
-        mAdapter.clear();
-        mAdapter.addAll(listings);
-        mAdapter.notifyDataSetChanged();
+        EndlessListingAdapter adapter = new EndlessListingAdapter(getActivity(), listings, mListingFetcher);
+        mLvListings.setAdapter(adapter);
     }
 
     @Override
