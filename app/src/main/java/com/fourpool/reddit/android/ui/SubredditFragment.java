@@ -92,7 +92,7 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
             return;
         }
 
-        EndlessListingAdapter adapter = new EndlessListingAdapter(getActivity(), listingsFetcher);
+        ListingEndlessArrayAdapter adapter = new ListingEndlessArrayAdapter(getActivity(), listingsFetcher);
         mLvListings.setAdapter(adapter);
         mLvListings.onRefreshComplete();
     }

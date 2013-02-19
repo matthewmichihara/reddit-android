@@ -26,7 +26,7 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     public static final String ARG_LISTING = "listing";
     private final List<Comment> mComments = new ArrayList<Comment>();
     private String mCommentsUrl;
-    private CommentAdapter mCommentAdapter;
+    private CommentArrayAdapter mCommentAdapter;
     private TextView mTvTitle;
     private ListView mLvComments;
 
@@ -109,7 +109,7 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
         mComments.clear();
         mComments.addAll(comments);
 
-        mCommentAdapter = new CommentAdapter(getActivity(), mComments);
+        mCommentAdapter = new CommentArrayAdapter(getActivity(), mComments);
         mLvComments.setAdapter(mCommentAdapter);
     }
 

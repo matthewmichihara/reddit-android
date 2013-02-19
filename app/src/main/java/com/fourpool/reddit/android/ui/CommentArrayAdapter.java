@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * @author Matthew Michihara
  */
-public class CommentAdapter extends ArrayAdapter<Comment> {
-    public CommentAdapter(Context context, List<Comment> comments) {
+public class CommentArrayAdapter extends ArrayAdapter<Comment> {
+    public CommentArrayAdapter(Context context, List<Comment> comments) {
         super(context, R.layout.list_item_comment, comments);
     }
 

@@ -8,10 +8,10 @@ import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 /**
  * @author Matthew Michihara
  */
-public class EndlessListingAdapter extends EndlessAdapter {
+public class ListingEndlessArrayAdapter extends EndlessAdapter {
     private final ListingsFetcher mListingsFetcher;
 
-    public EndlessListingAdapter(Context context, ListingsFetcher listingsFetcher) {
+    public ListingEndlessArrayAdapter(Context context, ListingsFetcher listingsFetcher) {
         super(context, new ListingAdapter(context, listingsFetcher.getCurrentListings()), R.layout.list_item_loading);
 
         mListingsFetcher = listingsFetcher;
