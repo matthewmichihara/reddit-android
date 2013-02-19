@@ -1,13 +1,13 @@
 package com.fourpool.reddit.android.ui;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -22,12 +22,18 @@ import java.util.List;
 /**
  * @author Matthew Michihara
  */
-public class CommentsFragment extends SherlockFragment {
+public class CommentsFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Comment>> {
     public static final String ARG_LISTING = "listing";
     private final List<Comment> mComments = new ArrayList<Comment>();
-    private CommentListAdapter mCommentListAdapter;
+    private String mCommentsUrl;
+    private CommentAdapter mCommentAdapter;
     private TextView mTvTitle;
     private ListView mLvComments;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +61,7 @@ public class CommentsFragment extends SherlockFragment {
                     comment.setIsExpanded(true);
                 }
 
-                mCommentListAdapter.notifyDataSetChanged();
+                mCommentAdapter.notifyDataSetChanged();
             }
         });
 
@@ -78,56 +84,37 @@ public class CommentsFragment extends SherlockFragment {
     }
 
     public void updateContent(Listing listing) {
-        final String url = listing.getPermalink();
+        mCommentsUrl = listing.getPermalink();
         String title = listing.getTitle();
 
         mTvTitle.setText(title);
 
-        new AsyncTask<Void, Void, List<Comment>>() {
-            @Override
-            protected List<Comment> doInBackground(Void... params) {
-                return CommentsFetcher.fetch(url + ".json");
-            }
-
-            @Override
-            protected void onPostExecute(List<Comment> comments) {
-                mComments.clear();
-                mComments.addAll(comments);
-
-                mCommentListAdapter = new CommentListAdapter(getActivity(), mComments);
-                mLvComments.setAdapter(mCommentListAdapter);
-                mCommentListAdapter.notifyDataSetChanged();
-            }
-        }.execute();
+        getLoaderManager().initLoader(0, null, this).forceLoad();
     }
 
-    public class CommentListAdapter extends ArrayAdapter<Comment> {
-        public CommentListAdapter(Context context, List<Comment> comments) {
-            super(context, R.layout.list_item_comment, comments);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_comment, null);
+    @Override
+    public Loader<List<Comment>> onCreateLoader(int i, Bundle bundle) {
+        Loader<List<Comment>> loader = new AsyncTaskLoader<List<Comment>>(getActivity()) {
+            @Override
+            public List<Comment> loadInBackground() {
+                return CommentsFetcher.fetch(mCommentsUrl + ".json");
             }
+        };
 
-            TextView tvAuthor = (TextView) convertView.findViewById(R.id.tv_author);
-            TextView tvText = (TextView) convertView.findViewById(R.id.tv_text);
+        return loader;
+    }
 
-            Comment comment = getItem(position);
+    @Override
+    public void onLoadFinished(Loader<List<Comment>> loader, List<Comment> comments) {
+        mComments.clear();
+        mComments.addAll(comments);
 
-            String padding = "";
-            for (int i = 0; i < comment.getLevel(); i++) {
-                padding += "---";
-            }
+        mCommentAdapter = new CommentAdapter(getActivity(), mComments);
+        mLvComments.setAdapter(mCommentAdapter);
+    }
 
-            tvAuthor.setText(padding + comment.getAuthor());
-            tvText.setText(padding + comment.getBody());
-
-            return convertView;
-        }
-
+    @Override
+    public void onLoaderReset(Loader<List<Comment>> loader) {
     }
 }
 

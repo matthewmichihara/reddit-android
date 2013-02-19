@@ -47,6 +47,9 @@ public class ListingsFetcher {
         mAfter = listingData.mAfter;
     }
 
+    /**
+     * Synchronously fetches listing data.
+     */
     private ListingData fetch(String url) {
         List<Listing> listings = new ArrayList<Listing>();
         String after = null;

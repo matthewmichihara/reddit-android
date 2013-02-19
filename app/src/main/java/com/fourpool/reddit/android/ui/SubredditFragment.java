@@ -15,14 +15,12 @@ import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
 
-import java.util.List;
-
 /**
  * Displays a list of links for a particular subreddit.
  *
  * @author Matthew Michihara
  */
-public class SubredditFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Listing>> {
+public class SubredditFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<ListingsFetcher> {
 
     private static final String TAG = SubredditFragment.class.getSimpleName();
     private ListingsFetcher mListingFetcher;
@@ -30,15 +28,26 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     private Callbacks mCallbacks;
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (!(activity instanceof Callbacks)) {
+            throw new ClassCastException("Activity must implement fragment's callbacks.");
+        }
+
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mListingFetcher = new ListingsFetcher(null);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_listing, container, false);
-
-        mListingFetcher = new ListingsFetcher(null);
 
         mLvListings = (ListView) v.findViewById(R.id.link_list);
         mLvListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,23 +64,12 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (!(activity instanceof Callbacks)) {
-            throw new ClassCastException("Activity must implement fragment's callbacks.");
-        }
-
-        mCallbacks = (Callbacks) activity;
-    }
-
-    @Override
-    public Loader<List<Listing>> onCreateLoader(int id, Bundle data) {
-        Loader<List<Listing>> loader = new AsyncTaskLoader<List<Listing>>(getActivity()) {
+    public Loader<ListingsFetcher> onCreateLoader(int id, Bundle data) {
+        Loader<ListingsFetcher> loader = new AsyncTaskLoader<ListingsFetcher>(getActivity()) {
             @Override
-            public List<Listing> loadInBackground() {
+            public ListingsFetcher loadInBackground() {
                 mListingFetcher.loadMore();
-                return mListingFetcher.getCurrentListings();
+                return mListingFetcher;
             }
         };
 
@@ -79,17 +77,17 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Listing>> loader, List<Listing> listings) {
+    public void onLoadFinished(Loader<ListingsFetcher> loader, ListingsFetcher listingsFetcher) {
         if (getActivity() == null) {
             return;
         }
 
-        EndlessListingAdapter adapter = new EndlessListingAdapter(getActivity(), listings, mListingFetcher);
+        EndlessListingAdapter adapter = new EndlessListingAdapter(getActivity(), listingsFetcher);
         mLvListings.setAdapter(adapter);
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Listing>> loader) {
+    public void onLoaderReset(Loader<ListingsFetcher> loader) {
     }
 
     interface Callbacks {
