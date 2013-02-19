@@ -24,6 +24,14 @@ public class ListingsFetcher {
     }
 
     /**
+     * Clears the internal state.
+     */
+    public synchronized void clear() {
+        mListings.clear();
+        mAfter = null;
+    }
+
+    /**
      * Returns a copy of all fetched listings.
      */
     public synchronized List<Listing> getCurrentListings() {

@@ -14,6 +14,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 /**
  * Displays a list of links for a particular subreddit.
@@ -24,7 +26,7 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
 
     private static final String TAG = SubredditFragment.class.getSimpleName();
     private ListingsFetcher mListingFetcher;
-    private ListView mLvListings;
+    private PullToRefreshListView mLvListings;
     private Callbacks mCallbacks;
 
     @Override
@@ -49,12 +51,20 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_listing, container, false);
 
-        mLvListings = (ListView) v.findViewById(R.id.link_list);
+        mLvListings = (PullToRefreshListView) v.findViewById(R.id.link_list);
         mLvListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Listing listing = (Listing) parent.getItemAtPosition(position);
                 mCallbacks.onListingClicked(listing);
+            }
+        });
+
+        mLvListings.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                mListingFetcher.clear();
+                getLoaderManager().restartLoader(0, null, SubredditFragment.this).forceLoad();
             }
         });
 
@@ -84,10 +94,12 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
 
         EndlessListingAdapter adapter = new EndlessListingAdapter(getActivity(), listingsFetcher);
         mLvListings.setAdapter(adapter);
+        mLvListings.onRefreshComplete();
     }
 
     @Override
     public void onLoaderReset(Loader<ListingsFetcher> loader) {
+        // Um stuff should probably be done here but I don't really get how this works...
     }
 
     interface Callbacks {
