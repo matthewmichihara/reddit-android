@@ -1,5 +1,6 @@
 package com.fourpool.reddit.android.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -10,12 +11,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.fourpool.reddit.android.BusProvider;
 import com.fourpool.reddit.android.R;
+import com.fourpool.reddit.android.RedditApplication;
 import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 /**
  * Displays a list of links for a particular subreddit.
@@ -25,8 +29,16 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 public class SubredditFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<ListingsFetcher> {
 
     private static final String TAG = SubredditFragment.class.getSimpleName();
+    @Inject Bus mBus;
     private ListingsFetcher mListingFetcher;
     private PullToRefreshListView mLvListings;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        ((RedditApplication) activity.getApplication()).inject(this);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +56,7 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Listing listing = (Listing) parent.getItemAtPosition(position);
-                BusProvider.getInstance().post(listing);
+                mBus.post(listing);
             }
         });
 

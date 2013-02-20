@@ -1,5 +1,6 @@
 package com.fourpool.reddit.android.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -11,13 +12,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.fourpool.reddit.android.BusProvider;
 import com.fourpool.reddit.android.R;
+import com.fourpool.reddit.android.RedditApplication;
 import com.fourpool.reddit.android.fetcher.CommentsFetcher;
 import com.fourpool.reddit.android.model.Comment;
 import com.fourpool.reddit.android.model.Listing;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +30,17 @@ import java.util.List;
 public class CommentsFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Comment>> {
     public static final String ARG_LISTING = "listing";
     private final List<Comment> mComments = new ArrayList<Comment>();
+    @Inject Bus mBus;
     private String mCommentsUrl;
     private CommentArrayAdapter mCommentAdapter;
     private TextView mTvTitle;
     private ListView mLvComments;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        ((RedditApplication) activity.getApplication()).inject(this);
     }
 
     @Override
@@ -85,14 +91,14 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     public void onResume() {
         super.onResume();
 
-        BusProvider.getInstance().register(this);
+        mBus.register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        BusProvider.getInstance().unregister(this);
+        mBus.unregister(this);
     }
 
     @Override

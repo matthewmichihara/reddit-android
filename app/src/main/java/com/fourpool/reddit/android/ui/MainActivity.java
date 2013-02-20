@@ -3,18 +3,25 @@ package com.fourpool.reddit.android.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.fourpool.reddit.android.BusProvider;
 import com.fourpool.reddit.android.R;
+import com.fourpool.reddit.android.RedditApplication;
 import com.fourpool.reddit.android.model.Listing;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import javax.inject.Inject;
+
 public class MainActivity extends SherlockFragmentActivity {
+    @Inject Bus mBus;
     private CommentsFragment mCommentsFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Inject ourself into the object graph.
+        ((RedditApplication) getApplication()).inject(this);
 
         // Check that the activity is using the layout version with the fragment container.
         if (findViewById(R.id.fragment_container) != null) {
@@ -40,14 +47,14 @@ public class MainActivity extends SherlockFragmentActivity {
     public void onResume() {
         super.onResume();
 
-        BusProvider.getInstance().register(this);
+        mBus.register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        BusProvider.getInstance().unregister(this);
+        mBus.unregister(this);
     }
 
     @Subscribe
