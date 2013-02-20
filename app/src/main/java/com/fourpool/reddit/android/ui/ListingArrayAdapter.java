@@ -15,8 +15,8 @@ import java.util.List;
 /**
  * @author Matthew Michihara
  */
-public class ListingAdapter extends ArrayAdapter<Listing> {
-    public ListingAdapter(Context context, List<Listing> list) {
+public class ListingArrayAdapter extends ArrayAdapter<Listing> {
+    public ListingArrayAdapter(Context context, List<Listing> list) {
         super(context, R.layout.list_item_listing, list);
     }
 

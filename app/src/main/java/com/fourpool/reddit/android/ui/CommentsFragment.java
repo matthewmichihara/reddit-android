@@ -11,10 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.fourpool.reddit.android.BusProvider;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.CommentsFetcher;
 import com.fourpool.reddit.android.model.Comment;
 import com.fourpool.reddit.android.model.Listing;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,24 +74,25 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     public void onStart() {
         super.onStart();
 
-        // During startup, check if there are arguments passed to the fragment. onStart is a good place to do this
-        // because the layout has already been applied to the fragment at this point so we can safely call the method
-        // below that sets the article text.
         Bundle args = getArguments();
         if (args != null) {
-            // Set the comments based on the link passed in.
             Listing listing = args.getParcelable(ARG_LISTING);
-            updateContent(listing);
+            onListingSelected(listing);
         }
     }
 
-    public void updateContent(Listing listing) {
-        mCommentsUrl = listing.getPermalink();
-        String title = listing.getTitle();
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        mTvTitle.setText(title);
+        BusProvider.getInstance().register(this);
+    }
 
-        getLoaderManager().initLoader(0, null, this).forceLoad();
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -115,6 +118,16 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
 
     @Override
     public void onLoaderReset(Loader<List<Comment>> loader) {
+    }
+
+    @Subscribe
+    public void onListingSelected(Listing listing) {
+        mCommentsUrl = listing.getPermalink();
+        String title = listing.getTitle();
+
+        mTvTitle.setText(title);
+
+        getLoaderManager().initLoader(0, null, this).forceLoad();
     }
 }
 

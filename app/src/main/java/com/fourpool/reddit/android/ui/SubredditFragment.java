@@ -1,6 +1,5 @@
 package com.fourpool.reddit.android.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.fourpool.reddit.android.BusProvider;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.fetcher.ListingsFetcher;
 import com.fourpool.reddit.android.model.Listing;
@@ -27,18 +27,6 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     private static final String TAG = SubredditFragment.class.getSimpleName();
     private ListingsFetcher mListingFetcher;
     private PullToRefreshListView mLvListings;
-    private Callbacks mCallbacks;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (!(activity instanceof Callbacks)) {
-            throw new ClassCastException("Activity must implement fragment's callbacks.");
-        }
-
-        mCallbacks = (Callbacks) activity;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +44,7 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Listing listing = (Listing) parent.getItemAtPosition(position);
-                mCallbacks.onListingClicked(listing);
+                BusProvider.getInstance().post(listing);
             }
         });
 
@@ -100,9 +88,5 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     @Override
     public void onLoaderReset(Loader<ListingsFetcher> loader) {
         // Um stuff should probably be done here but I don't really get how this works...
-    }
-
-    interface Callbacks {
-        void onListingClicked(Listing listing);
     }
 }

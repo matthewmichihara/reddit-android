@@ -12,7 +12,8 @@ public class ListingEndlessArrayAdapter extends EndlessAdapter {
     private final ListingsFetcher mListingsFetcher;
 
     public ListingEndlessArrayAdapter(Context context, ListingsFetcher listingsFetcher) {
-        super(context, new ListingAdapter(context, listingsFetcher.getCurrentListings()), R.layout.list_item_loading);
+        super(context, new ListingArrayAdapter(context, listingsFetcher.getCurrentListings()),
+                R.layout.list_item_loading);
 
         mListingsFetcher = listingsFetcher;
     }
@@ -25,7 +26,7 @@ public class ListingEndlessArrayAdapter extends EndlessAdapter {
 
     @Override
     protected void appendCachedData() {
-        ListingAdapter listingAdapter = (ListingAdapter) getWrappedAdapter();
+        ListingArrayAdapter listingAdapter = (ListingArrayAdapter) getWrappedAdapter();
         listingAdapter.clear();
         listingAdapter.addAll(mListingsFetcher.getCurrentListings());
     }

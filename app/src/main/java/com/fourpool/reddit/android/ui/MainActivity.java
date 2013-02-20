@@ -3,10 +3,13 @@ package com.fourpool.reddit.android.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.fourpool.reddit.android.BusProvider;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.model.Listing;
+import com.squareup.otto.Subscribe;
 
-public class MainActivity extends SherlockFragmentActivity implements SubredditFragment.Callbacks {
+public class MainActivity extends SherlockFragmentActivity {
+    private CommentsFragment mCommentsFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,34 @@ public class MainActivity extends SherlockFragmentActivity implements SubredditF
     }
 
     @Override
-    public void onListingClicked(Listing listing) {
-        // Create comments fragment and pass it the link to its content.
-        CommentsFragment commentsFragment = new CommentsFragment();
+    public void onResume() {
+        super.onResume();
+
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void listingSelected(Listing listing) {
+        // Do nothing if the CommentsFragment exists (Tablet UI?) since the CommentsFragment will manage it's own
+        // registering for Listings.
+        if (mCommentsFragment != null) {
+            return;
+        }
+
+        // If only a single fragment can be displayed at a time, start the CommentsFragment and pass it the selected
+        // listing.
         Bundle args = new Bundle();
         args.putParcelable(CommentsFragment.ARG_LISTING, listing);
+
+        // Create comments fragment.
+        CommentsFragment commentsFragment = new CommentsFragment();
         commentsFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
