@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title"
-        android:textAppearance="?android:textAppearanceLarge"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:text="Sample Title"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:layout_height="wrap_content"
+            android:text="Sample Title"
+            android:layout_width="match_parent"/>
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:text="Submitted by matt to gaming"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lv_comments"

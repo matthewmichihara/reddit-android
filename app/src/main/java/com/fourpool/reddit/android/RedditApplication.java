@@ -23,6 +23,11 @@ public class RedditApplication extends Application {
         mObjectGraph = ObjectGraph.create(new RedditModule());
     }
 
+    /**
+     * Allows objects to inject themselves into the Dagger Object Graph.
+     *
+     * @param object the object to inject.
+     */
     public void inject(Object object) {
         mObjectGraph.inject(object);
     }

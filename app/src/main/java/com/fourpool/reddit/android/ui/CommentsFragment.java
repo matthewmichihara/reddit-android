@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     private String mCommentsUrl;
     private CommentArrayAdapter mCommentAdapter;
     private TextView mTvTitle;
+    private TextView mTvSubtitle;
     private ListView mLvComments;
 
     @Override
@@ -47,6 +49,7 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_comments, container, false);
         mTvTitle = (TextView) root.findViewById(R.id.title);
+        mTvSubtitle = (TextView) root.findViewById(R.id.subtitle);
         mLvComments = (ListView) root.findViewById(R.id.lv_comments);
 
         mLvComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,8 +133,14 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     public void onListingSelected(Listing listing) {
         mCommentsUrl = listing.getPermalink();
         String title = listing.getTitle();
+        CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(listing.getCreatedUtc());
+        String author = listing.getAuthor();
+        String subreddit = listing.getSubreddit();
+        String subtitle = getActivity().getString(R.string.submitted_n_time_ago_by_x_to_y, relativeTimeSpanString,
+                author, subreddit);
 
         mTvTitle.setText(title);
+        mTvSubtitle.setText(subtitle);
 
         getLoaderManager().initLoader(0, null, this).forceLoad();
     }
