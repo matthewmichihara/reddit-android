@@ -34,7 +34,7 @@ public final class CommentsFetcher {
             Log.e(TAG, "Error parsing comments", e);
         }
 
-        return comments;
+        return getFlattenedComments(comments);
     }
 
     private static List<Comment> getComments(JSONObject commentsObject) {
@@ -48,22 +48,26 @@ public final class CommentsFetcher {
                 JSONObject commentObject = commentsArray.getJSONObject(i);
                 JSONObject commentDataObject = commentObject.getJSONObject("data");
 
-                String author = commentDataObject.getString("author");
-                String body = commentDataObject.getString("body");
-                List<Comment> replies = new ArrayList<Comment>();
+                try {
+                    String author = commentDataObject.getString("author");
+                    String body = commentDataObject.getString("body");
+                    List<Comment> replies = new ArrayList<Comment>();
 
-                JSONObject repliesObject = commentDataObject.optJSONObject("replies");
-                if (repliesObject != null) {
-                    replies.addAll(getComments(repliesObject));
+                    JSONObject repliesObject = commentDataObject.optJSONObject("replies");
+                    if (repliesObject != null) {
+                        replies.addAll(getComments(repliesObject));
+                    }
+
+                    Comment comment = new Comment(author, body, replies);
+
+                    for (Comment reply : replies) {
+                        reply.setParent(comment);
+                    }
+
+                    comments.add(comment);
+                } catch (JSONException e) {
+                    continue;
                 }
-
-                Comment comment = new Comment(author, body, replies);
-
-                for (Comment reply : replies) {
-                    reply.setParent(comment);
-                }
-
-                comments.add(comment);
             }
 
         } catch (JSONException e) {
@@ -71,5 +75,19 @@ public final class CommentsFetcher {
         }
 
         return comments;
+    }
+
+    /**
+     * Does what it says it does. Code duplication....
+     */
+    private static List<Comment> getFlattenedComments(List<Comment> comments) {
+        List<Comment> flattenedComments = new ArrayList<Comment>();
+
+        for (Comment comment : comments) {
+            flattenedComments.add(comment);
+            flattenedComments.addAll(comment.getAllDescendantReplies());
+        }
+
+        return flattenedComments;
     }
 }

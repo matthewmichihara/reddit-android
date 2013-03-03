@@ -79,8 +79,9 @@ public class ListingsFetcher {
                 String author = childListingData.getString("author");
                 String subreddit = childListingData.getString("subreddit");
                 long createdUtc = childListingData.getLong("created_utc");
+                int score = childListingData.getInt("score");
 
-                Listing listing = new Listing(title, permalink, author, subreddit, createdUtc);
+                Listing listing = new Listing(title, permalink, author, subreddit, createdUtc, score);
                 listings.add(listing);
             }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,9 +68,12 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
 
                 } else {
                     int commentIndex = mComments.indexOf(comment);
-                    List<Comment> children = comment.getReplies();
-                    mComments.addAll(commentIndex + 1, children);
+                    List<Comment> descendants = comment.getAllDescendantReplies();
+                    mComments.addAll(commentIndex + 1, descendants);
                     comment.setIsExpanded(true);
+                    for (Comment descendant : descendants) {
+                        descendant.setIsExpanded(true);
+                    }
                 }
 
                 mCommentAdapter.notifyDataSetChanged();
@@ -136,11 +140,12 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
         CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(listing.getCreatedUtc());
         String author = listing.getAuthor();
         String subreddit = listing.getSubreddit();
-        String subtitle = getActivity().getString(R.string.submitted_n_time_ago_by_x_to_y, relativeTimeSpanString,
-                author, subreddit);
+        int score = listing.getScore();
+        String subtitle = getActivity().getString(R.string.m_points_submitted_n_time_ago_by_x_to_y, score,
+                relativeTimeSpanString, author, subreddit);
 
         mTvTitle.setText(title);
-        mTvSubtitle.setText(subtitle);
+        mTvSubtitle.setText(Html.fromHtml(subtitle));
 
         getLoaderManager().initLoader(0, null, this).forceLoad();
     }

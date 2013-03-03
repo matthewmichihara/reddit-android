@@ -18,7 +18,7 @@ public class Comment {
         mBody = body;
         mReplies = replies;
 
-        mIsExpanded = false;
+        mIsExpanded = true;
     }
 
     public String getAuthor() {
@@ -34,15 +34,14 @@ public class Comment {
     }
 
     public List<Comment> getAllDescendantReplies() {
-        List<Comment> descendants = new ArrayList<Comment>();
+        List<Comment> descendantReplies = new ArrayList<Comment>();
 
-        descendants.addAll(mReplies);
-
-        for (Comment reply : mReplies) {
-            descendants.addAll(reply.getReplies());
+        for (Comment comment : mReplies) {
+            descendantReplies.add(comment);
+            descendantReplies.addAll(comment.getAllDescendantReplies());
         }
 
-        return descendants;
+        return descendantReplies;
     }
 
     public Comment getParent() {

@@ -1,6 +1,7 @@
 package com.fourpool.reddit.android.ui;
 
 import android.content.Context;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,12 +45,13 @@ public class ListingArrayAdapter extends ArrayAdapter<Listing> {
         CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(listing.getCreatedUtc());
         String author = listing.getAuthor();
         String subreddit = listing.getSubreddit();
-        String subtitle = getContext().getString(R.string.submitted_n_time_ago_by_x_to_y, relativeTimeSpanString,
-                author, subreddit);
+        int score = listing.getScore();
+        String subtitle = getContext().getString(R.string.m_points_submitted_n_time_ago_by_x_to_y, score,
+                relativeTimeSpanString, author, subreddit);
 
         // Populate views.
         holder.tvTitle.setText(title);
-        holder.tvSubtitle.setText(subtitle);
+        holder.tvSubtitle.setText(Html.fromHtml(subtitle));
 
         return convertView;
     }

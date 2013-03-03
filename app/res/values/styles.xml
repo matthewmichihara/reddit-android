@@ -5,11 +5,29 @@
         <!-- Set default widget styles -->
         <item name="android:actionBarStyle">@style/Widget.RedditAndroid.ActionBar</item>
         <item name="actionBarStyle">@style/Widget.RedditAndroid.ActionBar</item>
+        <item name="android:windowBackground">@color/global_bg</item>
+
     </style>
 
-    <style name="Widget.RedditAndroid.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    <style name="Widget.RedditAndroid.ActionBar" parent="Widget.Sherlock.Light.ActionBar">
         <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
         <item name="displayOptions">showHome|homeAsUp|showTitle</item>
+        <item name="android:background">@color/action_bar_bg</item>
+        <item name="android:titleTextStyle">@style/Theme.RedditAndroid.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/Theme.RedditAndroid.TitleTextStyle</item>
+    </style>
+
+    <style name="Theme.RedditAndroid.TitleTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/action_bar_title_text</item>
+    </style>
+
+    <style name="ListItemTitle">
+        <item name="android:textColor">@color/list_item_title_text</item>
+        <item name="android:textAppearance">?android:textAppearanceListItemSmall</item>
+    </style>
+
+    <style name="ListItemSubtitle">
+        <item name="android:textColor">@color/list_item_subtitle_text</item>
     </style>
 
 </resources>

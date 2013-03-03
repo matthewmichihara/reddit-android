@@ -22,15 +22,17 @@ public class Listing implements Parcelable {
     private final String mAuthor;
     private final String mSubreddit;
     private final long mCreatedUtc;
+    private final int mScore;
 
     private static final long MILLISECONDS_IN_SECOND = 1000;
 
-    public Listing(String title, String permalink, String author, String subreddit, long createdUtc) {
+    public Listing(String title, String permalink, String author, String subreddit, long createdUtc, int score) {
         mTitle = title;
         mPermalink = "http://reddit.com" + permalink;
         mAuthor = author;
         mSubreddit = subreddit;
         mCreatedUtc = createdUtc * MILLISECONDS_IN_SECOND;
+        mScore = score;
     }
 
     private Listing(Parcel in) {
@@ -39,6 +41,7 @@ public class Listing implements Parcelable {
         mAuthor = in.readString();
         mSubreddit = in.readString();
         mCreatedUtc = in.readLong();
+        mScore = in.readInt();
     }
 
     public String getTitle() {
@@ -61,6 +64,10 @@ public class Listing implements Parcelable {
         return mCreatedUtc;
     }
 
+    public int getScore() {
+        return mScore;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -73,6 +80,7 @@ public class Listing implements Parcelable {
         out.writeString(mAuthor);
         out.writeString(mSubreddit);
         out.writeLong(mCreatedUtc);
+        out.writeInt(mScore);
     }
 
 

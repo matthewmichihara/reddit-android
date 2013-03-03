@@ -23,6 +23,9 @@ public class MainActivity extends SherlockFragmentActivity {
         // Inject ourself into the object graph.
         ((RedditApplication) getApplication()).inject(this);
 
+        // Hide the 'up' action item.
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         // Check that the activity is using the layout version with the fragment container.
         if (findViewById(R.id.fragment_container) != null) {
 
