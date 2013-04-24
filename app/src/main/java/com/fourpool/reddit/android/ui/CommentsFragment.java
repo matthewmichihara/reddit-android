@@ -1,6 +1,8 @@
 package com.fourpool.reddit.android.ui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -32,6 +34,7 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     private final List<Comment> mComments = new ArrayList<Comment>();
     @Inject Bus mBus;
     private String mCommentsUrl;
+    private String mUrl;
     private CommentArrayAdapter mCommentAdapter;
     private TextView mTvTitle;
     private TextView mTvSubtitle;
@@ -48,6 +51,17 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_comments, container, false);
         mTvTitle = (TextView) root.findViewById(R.id.title);
+
+        // Open URL when clicked.
+        mTvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(mUrl));
+                startActivity(intent);
+            }
+        });
+
         mTvSubtitle = (TextView) root.findViewById(R.id.subtitle);
         mLvComments = (ListView) root.findViewById(R.id.lv_comments);
 
@@ -136,6 +150,7 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
     @Subscribe
     public void onListingSelected(Listing listing) {
         mCommentsUrl = listing.getPermalink();
+        mUrl = listing.getUrl();
         String title = listing.getTitle();
         CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(listing.getCreatedUtc());
         String author = listing.getAuthor();

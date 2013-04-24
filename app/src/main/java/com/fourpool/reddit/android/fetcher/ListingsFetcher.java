@@ -10,9 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Matthew Michihara
- */
+/** @author Matthew Michihara */
 public class ListingsFetcher {
     private static final String TAG = ListingsFetcher.class.getSimpleName();
     private final String mSubreddit;
@@ -23,17 +21,13 @@ public class ListingsFetcher {
         mSubreddit = subreddit;
     }
 
-    /**
-     * Clears the internal state.
-     */
+    /** Clears the internal state. */
     public synchronized void clear() {
         mListings.clear();
         mAfter = null;
     }
 
-    /**
-     * Returns a copy of all fetched listings.
-     */
+    /** Returns a copy of all fetched listings. */
     public synchronized List<Listing> getCurrentListings() {
         return new ArrayList<Listing>(mListings);
     }
@@ -55,9 +49,7 @@ public class ListingsFetcher {
         mAfter = listingData.mAfter;
     }
 
-    /**
-     * Synchronously fetches listing data.
-     */
+    /** Synchronously fetches listing data. */
     private ListingData fetch(String url) {
         List<Listing> listings = new ArrayList<Listing>();
         String after = null;
@@ -76,12 +68,13 @@ public class ListingsFetcher {
 
                 String title = childListingData.getString("title");
                 String permalink = childListingData.getString("permalink");
+                String listingUrl = childListingData.getString("url");
                 String author = childListingData.getString("author");
                 String subreddit = childListingData.getString("subreddit");
                 long createdUtc = childListingData.getLong("created_utc");
                 int score = childListingData.getInt("score");
 
-                Listing listing = new Listing(title, permalink, author, subreddit, createdUtc, score);
+                Listing listing = new Listing(title, permalink, listingUrl, author, subreddit, createdUtc, score);
                 listings.add(listing);
             }
 
@@ -92,9 +85,7 @@ public class ListingsFetcher {
         return new ListingData(listings, after);
     }
 
-    /**
-     * Container object for returning listing data.
-     */
+    /** Container object for returning listing data. */
     class ListingData {
         List<Listing> mListings;
         String mAfter;
