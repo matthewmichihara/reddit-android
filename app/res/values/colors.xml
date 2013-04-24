@@ -2,7 +2,8 @@
 <resources>
     <color name="global_bg">#E5DDCB</color>
     <color name="action_bar_title_text">#FFFFFF</color>
-    <color name="action_bar_bg">#600000</color>
+    <color name="action_bar_bg">#bc160d</color>
+    <color name="comment_title_bg">#FEF4C0</color>
     <color name="list_item_title_text">#040004</color>
     <color name="list_item_subtitle_text">#413D3D</color>
 </resources>

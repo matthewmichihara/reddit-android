@@ -26,9 +26,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Matthew Michihara
- */
+/** @author Matthew Michihara */
 public class CommentsFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Comment>> {
     public static final String ARG_LISTING = "listing";
     private final List<Comment> mComments = new ArrayList<Comment>();
