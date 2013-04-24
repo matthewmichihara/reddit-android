@@ -52,6 +52,9 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
         View v = inflater.inflate(R.layout.fragment_listing, container, false);
 
         mLvListings = (PullToRefreshListView) v.findViewById(R.id.link_list);
+
+        mLvListings.setEmptyView(v.findViewById(R.id.pb_loading));
+
         mLvListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

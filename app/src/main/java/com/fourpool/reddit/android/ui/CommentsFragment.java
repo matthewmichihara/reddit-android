@@ -53,6 +53,8 @@ public class CommentsFragment extends SherlockFragment implements LoaderManager.
         mTvSubtitle = (TextView) root.findViewById(R.id.subtitle);
         mLvComments = (ListView) root.findViewById(R.id.lv_comments);
 
+        mLvComments.setEmptyView(root.findViewById(R.id.pb_loading));
+
         mLvComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
