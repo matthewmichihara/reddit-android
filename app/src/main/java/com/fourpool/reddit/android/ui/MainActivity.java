@@ -1,8 +1,10 @@
 package com.fourpool.reddit.android.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.fourpool.reddit.android.R;
 import com.fourpool.reddit.android.RedditApplication;
 import com.fourpool.reddit.android.model.Listing;
@@ -23,8 +25,6 @@ public class MainActivity extends SherlockFragmentActivity {
         // Inject ourself into the object graph.
         ((RedditApplication) getApplication()).inject(this);
 
-        // Hide the 'up' action item.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         // Check that the activity is using the layout version with the fragment container.
         if (findViewById(R.id.fragment_container) != null) {
@@ -60,32 +60,45 @@ public class MainActivity extends SherlockFragmentActivity {
         mBus.unregister(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.remove(mCommentsFragment);
+                ft.commit();
+                manager.popBackStack();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Subscribe
     public void listingSelected(Listing listing) {
-        // Do nothing if the CommentsFragment exists (Tablet UI?) since the CommentsFragment will manage it's own
-        // registering for Listings.
-        if (mCommentsFragment != null) {
-            return;
-        }
-
         // If only a single fragment can be displayed at a time, start the CommentsFragment and pass it the selected
         // listing.
         Bundle args = new Bundle();
         args.putParcelable(CommentsFragment.ARG_LISTING, listing);
 
         // Create comments fragment.
-        CommentsFragment commentsFragment = new CommentsFragment();
-        commentsFragment.setArguments(args);
+        mCommentsFragment = new CommentsFragment();
+        mCommentsFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment container with this fragment, and add the transaction to the back stack
         // so the user can navigate back.
-        transaction.replace(R.id.fragment_container, commentsFragment);
+        transaction.replace(R.id.fragment_container, mCommentsFragment);
         transaction.addToBackStack(null);
 
         // Commit the transaction.
         transaction.commit();
+
+        // Display the action bar home button.
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }
 

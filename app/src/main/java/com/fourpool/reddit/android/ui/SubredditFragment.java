@@ -77,6 +77,14 @@ public class SubredditFragment extends SherlockFragment implements LoaderManager
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        // Hide the action bar 'up' button. Not sure if this belongs here...
+        getSherlockActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
     public Loader<ListingsFetcher> onCreateLoader(int id, Bundle data) {
         Loader<ListingsFetcher> loader = new AsyncTaskLoader<ListingsFetcher>(getActivity()) {
             @Override
